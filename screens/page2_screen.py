@@ -1,45 +1,40 @@
 from kivy.uix.screenmanager import Screen
 from kivy.clock import Clock
+import random
 
 class Page2Screen(Screen):
-    video_sources=[
-        
-    ]
-    # def on_enter(self):
-    #     self.ids.loading_spinner.active = True
-    #     Clock.schedule_once(self.show_button, 20)
-    #     # self.carousel_interval = Clock.schedule_interval(self.automate_carousel, 8)
-    #     self.update_video_states()
+    def on_enter(self, *args):
+        """Called when the screen is entered."""
+        # Show spinner and hide button initially
+        # self.ids.loading_spinner.opacity = 1
+        # self.ids.loading_spinner.active = True
+        # self.ids.delayed_button.opacity = 0
+        # self.ids.delayed_button.disabled = True
 
-    # def on_leave(self):
-    #     if hasattr(self, 'carousel_interval'):
-    #         Clock.unschedule(self.carousel_interval)
+        # Start the spinner and schedule video playback
+        Clock.schedule_once(self.show_button, 5)  # Show button after 5 seconds
+        self.play_random_video()
 
-        # for slide in self.ids.carousel.slides:
-        #     video = slide.children[0]
-        #     video.state = "pause"
+    def play_random_video(self):
+        """Select and play a random video."""
+        video_sources = [
+            'video/loading/B-loading1.mp4',
+            'video/loading/G-loading1.mp4',
+            'video/loading/R-loading1.mp4',
+            'video/loading/Y-loading1.mp4',
+            'video/loading/Y-loading2.mp4',
+            'video/loading/Y-loading3.mp4',
+        ]
+        # Randomly select a video from the list
+        selected_video = random.choice(video_sources)
+        # Set the video player's source to the selected video
+        self.ids.video_player.source = selected_video
+        # Start playing the video
+        self.ids.video_player.state = 'play'
 
-    # def show_button(self, dt):
-    #     self.ids.loading_spinner.active = False
-    #     self.manager.current = "result"
-    #     self.manager.transition.direction = 'left'
-
-    # def automate_carousel(self, dt):
-    #     carousel = self.ids.carousel
-    #     next_index = (carousel.index + 1) % len(carousel.slides)
-    #     carousel.load_slide(carousel.slides[next_index])
-    #     self.update_video_states()
-
-    # def update_video_states(self):
-    #     carousel = self.ids.carousel
-    #     current_slide = carousel.current_slide
-
-    #     for slide in carousel.slides:
-    #         video = slide.children[0]
-    #         video.state = "play" if slide == current_slide else "pause"
-
-    # def stop_auto_carousel(self):
-    #     """Stop the automatic carousel when user interacts manually."""
-    #     if hasattr(self, 'carousel_interval'):
-    #         Clock.unschedule(self.carousel_interval)
-    #         del self.carousel_interval  # Clean up the attribute
+    def show_button(self, *args):
+        """Show the button and stop the spinner."""
+        self.ids.loading_spinner.opacity = 0
+        self.ids.loading_spinner.active = False
+        self.ids.delayed_button.opacity = 1
+        self.ids.delayed_button.disabled = False

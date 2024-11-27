@@ -1,44 +1,30 @@
 <Page2Screen>:
     name: "page2"
-    canvas.before: 
-        Color: 
-            rgba: (207/255, 241/255, 200/255, 1)  # Set background color to white
-        Rectangle: 
-            size: self.size 
+    canvas.before:
+        Color:
+            rgba: (221/255, 237/255, 233/255, 1)  # Set background color to white
+        Rectangle:
+            size: self.size
             pos: self.pos
 
     FloatLayout:
         Video:
             id: video_player
-            source: ""  # Path to the first video
-            state: "stop"  # Start paused
+            source: ""  # Video source is set dynamically
+            state: "stop"  # Initially paused
             allow_stretch: True
             options: {"eos": "loop"}  # Loop video when it ends
             size_hint: 1, 1  # Fill the slide area
             pos_hint: {"center_x": 0.5, "center_y": 0.5}  # Center the player
 
-        
-        # Back to Home button
-        MDFloatingActionButton:
-            icon: "home-variant"  # Replace with the desired icon name from Material Icons
-            text_color: 'white'
-            size_hint: None, None
-            size: "56dp", "56dp"
-            md_bg_color: '#1EDC5A'
-            pos_hint: {"center_x": 0.07, "center_y": 0.85}
-            elevation_normal: 8
-            on_release: 
-                app.root.current = "mascot"
-                root.manager.transition.direction = 'right'
-
-        #MDSpinner:
+        MDSpinner:
             id: loading_spinner
             size_hint: None, None
             size: dp(46), dp(46)
             pos_hint: {'center_x': .9, 'center_y': .1}
             color: 0.82, 0.44, 0.15, 1  # Spinner color set to #d17125
-            active: True  # Start active
-            opacity: 1
+            active: False  # Start inactive
+            opacity: 0  # Hidden initially
 
         MDRaisedButton:
             id: delayed_button
@@ -48,14 +34,11 @@
             size_hint: 0.2, 0.1
             pos_hint: {"center_x": 0.85, "center_y": 0.1}
             font_size: "25sp"
-            opacity: 0
-            disabled: True
+            opacity: 0  # Hidden initially
+            disabled: True  # Disabled initially
             on_release:
                 app.root.current = "result"
                 root.manager.transition.direction = 'left'
             theme_bg_color: "Custom"
             md_bg_color: "#1EDC5A"
             elevation_normal: 8
-
-        
-        

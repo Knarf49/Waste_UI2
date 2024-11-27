@@ -15,4 +15,4 @@ class MyScreenManager(ScreenManager):
         self.add_widget(ShowBinScreen(name="showbin"))
         self.add_widget(Page2Screen(name="page2"))
         self.add_widget(ResultScreen(name="result"))
-        self.add_widget(EndCreditScreen(name="EndCredit"))
+        self.add_widget(EndCreditScreen(name="endcredit"))

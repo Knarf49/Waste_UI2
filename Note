@@ -95,3 +95,32 @@ Carousel:
                     options: {"eos": "loop"}  # Loop video when it ends
                     size_hint: 1, 1
                     pos_hint: {"center_x": 0.5, "center_y": 0.5}
+
+
+# Back to Home button
+        MDFloatingActionButton:
+            icon: "home-variant"  # Replace with the desired icon name from Material Icons
+            text_color: 'white'
+            size_hint: None, None
+            size: "56dp", "56dp"
+            md_bg_color: '#1EDC5A'
+            pos_hint: {"center_x": 0.07, "center_y": 0.85}
+            elevation_normal: 8
+            on_release: 
+                app.root.current = "mascot"
+                root.manager.transition.direction = 'right'
+
+
+MDRaisedButton:
+        id: play_video_button
+        font_name: 'prompt-B'
+        text: "Play Random Video"
+        text_color: [1, 1, 1, 1]  # White text
+        size_hint: 0.3, 0.1
+        pos_hint: {"center_x": 0.5, "center_y": 0.2}
+        font_size: "20sp"
+        on_release:
+            root.play_random_video()
+        theme_bg_color: "Custom"
+        md_bg_color: "#1EDC5A"
+        elevation_normal: 8

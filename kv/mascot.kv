@@ -1,8 +1,11 @@
+#: import NoTransition kivy.uix.screenmanager.NoTransition
+#: import CardTransition kivy.uix.screenmanager.CardTransition
+
 <MascotScreen>:
     name: "mascot"
     canvas.before:
         Color:
-            rgba: (207/255, 241/255, 200/255, 1)  # Set background color to white
+            rgba: (221/255, 237/255, 233/255, 1)  # Set background color to white
         Rectangle:
             size: self.size
             pos: self.pos
@@ -23,5 +26,5 @@
             background_color: 0, 0, 0, 0  # Fully transparent
             size_hint: 1, 1  # Covers the entire screen
             on_press:
-                root.manager.transition.direction='left'
+                root.manager.transition= CardTransition()
                 app.root.current = "mascot2"

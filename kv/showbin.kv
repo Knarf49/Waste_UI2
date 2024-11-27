@@ -2,7 +2,6 @@
 
 <ShowBinScreen>:
     name: "showbin"
-
     canvas.before:
         Color:
             rgba: (207/255, 241/255, 200/255, 1)  # Set background color
@@ -13,7 +12,7 @@
     FloatLayout:
         Video:
             id: showbin_video
-            source: ""  # Start with no source, set it in Python
+            source: "video/loading/B-loading1.mp4"  # Start with no source, set it in Python
             state: "pause"  # Default state
             allow_stretch: True  # Allow stretching
             options: {"eos": "loop"}  # Loop when video ends
@@ -25,5 +24,5 @@
             background_color: 0, 0, 0, 0  # Fully transparent
             size_hint: 1, 1
             on_press:
-                root.manager.transition= SlideTransition()
+                #root.manager.transition= SlideTransition()
                 app.root.current = "page2"
