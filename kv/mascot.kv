@@ -1,0 +1,27 @@
+<MascotScreen>:
+    name: "mascot"
+    canvas.before:
+        Color:
+            rgba: (207/255, 241/255, 200/255, 1)  # Set background color to white
+        Rectangle:
+            size: self.size
+            pos: self.pos
+
+    FloatLayout:
+        orientation: "vertical"
+        Video:
+            id: mascot_video
+            source: "video/Home_Screen.mp4"  # Path to your video
+            state: "play"  # Start playing the video
+            allow_stretch: True  # Allow the video to stretch to fit
+            options: {"eos": "loop"}  # Loop the video when it ends
+            size_hint: 1,1  # Make the video fill the screen
+            pos_hint: {"center_x": .5, "center_y": .5}
+
+    FloatLayout:
+        Button:
+            background_color: 0, 0, 0, 0  # Fully transparent
+            size_hint: 1, 1  # Covers the entire screen
+            on_press:
+                root.manager.transition.direction='left'
+                app.root.current = "mascot2"

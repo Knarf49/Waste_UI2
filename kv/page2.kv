@@ -1,0 +1,105 @@
+<Page2Screen>:
+    name: "page2"
+    canvas.before: 
+        Color: 
+            rgba: (207/255, 241/255, 200/255, 1)  # Set background color to white
+        Rectangle: 
+            size: self.size 
+            pos: self.pos
+
+    FloatLayout:
+        Carousel:
+            id: carousel
+            loop: True
+            size_hint: 1, 1  # Carousel size
+            on_index: root.update_video_states()
+            pos_hint: {"center_x": 0.5, "center_y": 0.5}  # Carousel position
+            on_index: root.update_video_states()
+            on_touch_up: root.stop_auto_carousel()
+
+            # Slide 1 with VideoPlayer
+            FloatLayout:
+                Video:
+                    id: videoplayer1
+                    source: "video/loading/B-loading1.mp4"  # Path to the first video
+                    state: "play"  # Start paused
+                    allow_stretch: True
+                    options: {"eos": "loop"}  # Loop video when it ends
+                    size_hint: 1, 1  # Fill the slide area
+                    pos_hint: {"center_x": 0.5, "center_y": 0.5}  # Center the player
+            # Slide 2 with VideoPlayer
+            FloatLayout:
+                Video:
+                    id: videoplayer2
+                    source: "video/loading/Y-loading1.mp4"  # Path to the second video
+                    state: "play"
+                    allow_stretch: True
+                    options: {"eos": "loop"}  # Loop video when it ends
+                    size_hint: 1, 1
+                    pos_hint: {"center_x": 0.5, "center_y": 0.5}
+
+            # Slide 3 with VideoPlayer
+            FloatLayout:
+                Video:
+                    id: videoplayer3
+                    source: "video/loading/Y-loading2.mp4"  # Path to the third video
+                    state: "play"
+                    allow_stretch: True
+                    options: {"eos": "loop"}  # Loop video when it ends
+                    size_hint: 1, 1
+                    pos_hint: {"center_x": 0.5, "center_y": 0.5}
+
+            # Slide 4 with VideoPlayer
+            FloatLayout:
+                #title: 'การรีไซเคิลกระดาษ 1 ตันช่วยลดการตัดต้นไม้ได้ถึง 17 ต้น!'
+                Video:
+                    id: videoplayer4
+                    source: "video/loading/Y-loading3.mp4"  # Path to the fourth video
+                    state: "play"
+                    allow_stretch: True
+                    options: {"eos": "loop"}  # Loop video when it ends
+                    size_hint: 1, 1
+                    pos_hint: {"center_x": 0.5, "center_y": 0.5}
+
+        
+        # Back to Home button
+        MDFloatingActionButton:
+            icon: "home-variant"  # Replace with the desired icon name from Material Icons
+            text_color: 'white'
+            size_hint: None, None
+            size: "56dp", "56dp"
+            md_bg_color: '#1EDC5A'
+            pos_hint: {"center_x": 0.07, "center_y": 0.85}
+            elevation_normal: 8
+            on_release: 
+                app.root.current = "mascot"
+                root.manager.transition.direction = 'right'
+
+        #MDSpinner:
+            id: loading_spinner
+            size_hint: None, None
+            size: dp(46), dp(46)
+            pos_hint: {'center_x': .9, 'center_y': .1}
+            color: 0.82, 0.44, 0.15, 1  # Spinner color set to #d17125
+            active: True  # Start active
+            opacity: 0
+
+        MDRaisedButton:
+            id: delayed_button
+            font_name: 'prompt-B'
+            text: "กดเพื่อดูผลลัพธ์"
+            text_color: [1, 1, 1, 1]  # White text
+            size_hint: 0.2, 0.1
+            pos_hint: {"center_x": 0.85, "center_y": 0.1}
+            font_size: "25sp"
+            opacity: 0
+            disabled: True
+            on_release:
+                app.root.current = "result"
+                root.manager.transition.direction = 'left'
+            theme_bg_color: "Custom"
+            md_bg_color: "#1EDC5A"
+            elevation_normal: 8
+
+        
+        

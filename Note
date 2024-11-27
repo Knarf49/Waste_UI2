@@ -1,0 +1,43 @@
+# Camera Preview
+Camera:
+  id: camera
+  resolution: (480, 640)
+  play: True # Start the camera feed
+  size_hint: 1.5, 2
+  pos_hint: { "center_x": 0.5, "center_y": 0.4 }
+
+Image:
+  source: 'img/BG.png'
+  allow_stretch: False
+  size_hint: None, None  # Disable relative sizing
+  size: 1200,1200  # Set size directly or use dynamic scaling
+  keep_ratio: True
+  allow_stretch: True
+  pos_hint: {"center_x":0.5,"center_y":0.1}
+
+MDSpinner:
+  id: loading_spinner
+  size_hint: None, None
+  size: dp(46), dp(46)
+  pos_hint: {'center_x': .9, 'center_y': .1}
+  color: 0.82, 0.44, 0.15, 1  # Spinner color set to #d17125
+  active: True  # Start active
+  opacity: 1
+
+        # Button to navigate to page3
+          MDRaisedButton:
+            id: delayed_button
+            font_name: 'prompt-B'
+            text: "กดเพื่อดูผลลัพธ์"
+            text_color: [1, 1, 1, 1]  # White text
+            size_hint: 0.2, 0.1
+            pos_hint: {"center_x": 0.85, "center_y": 0.1}
+            font_size: "25sp"
+            opacity: 0
+            disabled: True
+            on_release:
+                app.root.current = "result"
+                root.manager.transition.direction = 'left'
+            theme_bg_color: "Custom"
+            md_bg_color: "#1EDC5A"
+            elevation_normal: 8

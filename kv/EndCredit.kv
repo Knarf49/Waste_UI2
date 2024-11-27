@@ -1,0 +1,19 @@
+<EndCreditScreen>:
+    name: "endcredit"
+    canvas.before:
+        Color:
+            rgba: (207/255, 241/255, 200/255, 1)  # Set background color
+        Rectangle:
+            size: self.size
+            pos: self.pos
+
+    BoxLayout:
+        orientation: "vertical"
+        Video:
+            id: thankVdo
+            source: "video/EndCredit.mp4"  # Path to your video
+            state: "play"  # Start playing the video
+            allow_stretch: True
+            options: {"eos": "stop"}  # Stop playback on end
+            size_hint: 1, 1  # Fill the screen
+            pos_hint: {"center_x": 0.5, "center_y": 0.5}

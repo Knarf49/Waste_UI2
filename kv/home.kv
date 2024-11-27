@@ -1,0 +1,40 @@
+#: import NoTransition kivy.uix.screenmanager.NoTransition
+<HomeScreen>:
+    name: "home"
+    canvas.before: 
+        Color: 
+            rgba: (255, 255, 255, 255)
+        Rectangle: 
+            size: self.size 
+            pos: self.pos
+    FloatLayout:
+        Image:
+            source:'img/Head.png'
+            allow_stretch: False
+            size_hint: None, None  # Disable relative sizing
+            size: 1000, 1000  # Set size directly or use dynamic scaling
+            keep_ratio: True
+            allow_stretch: True
+            pos_hint: {"center_x": 0.45, "center_y": 0.85}
+        
+        # Background Image
+        Image:
+            source: 'img/BG.png'
+            allow_stretch: False
+            size_hint: None, None  # Disable relative sizing
+            size: 1200, 1200  # Set size directly or use dynamic scaling
+            keep_ratio: True
+            allow_stretch: True
+            pos_hint: {"center_x": 0.5, "center_y": 0.1}
+
+        
+        # Navigation Button
+        Button:
+            text: "Go to Page 2"
+            font_name: 'Cooper-B'
+            size_hint: 0.3, 0.1
+            pos_hint: {"center_x": 0.2, "center_y": 0.2}
+            elevation_normal: 8
+            on_release: 
+                app.root.current = "page2"
+                root.current.transition=NoTransition()

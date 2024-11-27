@@ -1,0 +1,28 @@
+#: import NoTransition kivy.uix.screenmanager.NoTransition
+
+<Mascot2Screen>:
+    name: "mascot2"
+    canvas.before:
+        Color:
+            rgba: (207/255, 241/255, 200/255, 1)  # Set background color
+        Rectangle:
+            size: self.size
+            pos: self.pos
+
+    FloatLayout:
+        Video:
+            id: mascot_video
+            source: ""  # Start with no source, set it in Python
+            state: "pause"  # Default state
+            allow_stretch: True  # Allow stretching
+            options: {"eos": "loop"}  # Loop when video ends
+            size_hint: 1, 1
+            pos_hint: {"center_x": 0.5, "center_y": 0.5}
+
+    FloatLayout:
+        Button:
+            background_color: 0, 0, 0, 0  # Fully transparent
+            size_hint: 1, 1
+            on_press:
+                root.manager.transition= NoTransition()
+                app.root.current = "showbin"
