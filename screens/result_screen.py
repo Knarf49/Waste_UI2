@@ -19,3 +19,9 @@ class ResultScreen(Screen):
         """
         self.video_source = new_source
         print(f"Video source changed to: {new_source}")
+
+    def on_video_click(self, instance, touch):
+        # Check if the touch event was inside the video area
+        if instance.collide_point(*touch.pos):  # Check if the click is inside the video widget
+            print("Video clicked!")
+            self.manager.current = "endcredit"  # Switch to the 'endcredit' screen

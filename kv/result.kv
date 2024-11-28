@@ -6,49 +6,8 @@
         Rectangle:
             size: self.size
             pos: self.pos
+
     FloatLayout:
-        # Video Player
-        Video:
-            id: res_recycle
-            source: root.video_source  # Path to the fourth video
-            state: "play" if root.video_source else "stop"
-            allow_stretch: True
-            options: {"eos": "loop"}  # Loop video when it ends
-            size_hint: 1, 1
-            pos_hint: {"center_x": 0.5, "center_y": .5}
-
-
-        # Icon Button using KivyMD
-        MDFloatingActionButton:
-            icon: "home-variant"  # Replace with the desired icon name from Material Icons
-            text_color: 'white'
-            size_hint: None, None
-            size: "56dp", "56dp"
-            md_bg_color: '#1EDC5A'
-            pos_hint: {"center_x": 0.9, "center_y": 0.5}
-            elevation_normal: 1
-            on_release: 
-                app.root.current = "endcredit"
-
-        #MDRaisedButton:
-            #text: "กลับไปดูข้อมูล"
-            #pos_hint: {"center_x": .15, "center_y": .95}
-            #size_hint: 0.2, 0.1
-            #font_name: 'prompt-B'
-            #font_size: "25sp"
-            #md_bg_color: '#1EDC5A'
-            #text_color: [1, 1, 1, 1]  # White text
-            #on_release:
-                #app.root.current = "page2"
-                #root.manager.transition.direction = 'right'
-
-        #MDRaisedButton:
-            #text: "Add video"
-            #pos_hint: {"center_x": .3, "center_y": 0.1}
-            #size_hint: 0.2, 0.1
-            #font_name: 'prompt-B'
-            #font_size: "25sp"
-            #md_bg_color: '#1EDC5A'
-            #text_color: [1, 1, 1, 1]  # White text
-            #on_release:
-                #root.change_video(new_source)
+        MDIconButton:
+            icon: "home-variant"
+            style: "filled"

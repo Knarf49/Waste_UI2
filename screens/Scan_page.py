@@ -10,29 +10,6 @@ from threading import Thread
 from ultralytics import YOLO
 import time
 
-Builder.load_string('''
-<ScanScreen>:
-    name: "scan"
-    canvas.before:
-        Color:
-            rgba: (221/255, 237/255, 233/255, 1)  # Set background color to white
-        Rectangle:
-            size: self.size
-            pos: self.pos
-
-    FloatLayout:
-        CameraImage:
-            id: camera_view
-            size_hint: .7, .7
-            pos_hint: {"center_x": 0.5, "center_y": 0.5}
-
-        MDRaisedButton:
-            text: 'Open Camera (OpenCV)'
-            size_hint: None, None
-            size: 200, 50
-            pos_hint: {'center_x': 0.5, 'y': 0.1}
-            on_release: root.start_camera_thread()
-''')
 
 class CameraImage(Image):
     pass
@@ -47,6 +24,21 @@ class ScanScreen(Screen):
         self.model = YOLO(r"C:\Users\Frank\Documents\GitHub\Waste_UI2\best.pt")  # โหลด YOLO โมเดล (แก้ไข path ให้ตรงกับโมเดลของคุณ)
         self.detected_plastic_bottle = False
         self.detection_start_time = None
+
+    def on_enter(self, *args):
+        """
+        Called when the screen is entered. Starts the camera automatically.
+        """
+        super().on_enter(*args)
+        self.start_camera_thread()
+    
+    def on_leave(self, *args):
+        """
+        Called when the screen is left. Stops the camera.
+        """
+        super().on_leave(*args)
+        self.stop_camera()
+
 
     def start_camera_thread(self):
         """
@@ -63,7 +55,7 @@ class ScanScreen(Screen):
         if self.capture is not None:
             self.stop_camera()
 
-        self.capture = cv2.VideoCapture(1)  # ใช้ index 1 สำหรับ USB camera
+        self.capture = cv2.VideoCapture(0)  # ใช้ index 1 สำหรับ USB camera
         if not self.capture.isOpened():
             print("Error: Could not open the USB camera.")
             return
@@ -83,7 +75,7 @@ class ScanScreen(Screen):
         ret, frame = self.capture.read()
         if ret:
             # Flip the frame vertically
-            frame = cv2.flip(frame, 0)
+            # frame = cv2.flip(frame, 0)
 
             # Convert the frame to RGB for YOLO
             img = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
@@ -159,16 +151,3 @@ class ScanScreen(Screen):
             self.capture = None
             self.camera_running = False
             print("Camera has been stopped.")
-
-if __name__ == "__main__":
-    import kivy
-    from kivymd.app import MDApp
-    from kivy.core.window import Window
-
-    Window.size = (1024, 600)
-
-    class MyApp(MDApp):
-        def build(self):
-            return ScanScreen()
-
-    MyApp().run()

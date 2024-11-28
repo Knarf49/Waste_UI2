@@ -11,7 +11,7 @@ class Mascot2Screen(Screen):
         video.allow_stretch = True
 
         # Schedule transition to the next screen after 3 seconds
-        Clock.schedule_once(self.go_to_next_screen, 6)
+        Clock.schedule_once(self.go_to_next_screen, 3)
 
     def go_to_next_screen(self, dt):
         """Transition to the 'showbin' screen."""
