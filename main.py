@@ -19,6 +19,7 @@ Builder.load_file("kv/mascot.kv")
 Builder.load_file("kv/mascot2.kv")
 Builder.load_file("kv/showbin.kv")
 Builder.load_file("kv/endcredit.kv")
+Builder.load_file("kv/scan.kv")
 
 class MyApp(MDApp):
     def build(self):

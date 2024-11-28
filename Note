@@ -1,10 +1,4 @@
-# Camera Preview
-Camera:
-  id: camera
-  resolution: (480, 640)
-  play: True # Start the camera feed
-  size_hint: 1.5, 2
-  pos_hint: { "center_x": 0.5, "center_y": 0.4 }
+
 
 Image:
   source: 'img/BG.png'

@@ -6,13 +6,13 @@ class Page2Screen(Screen):
     def on_enter(self, *args):
         """Called when the screen is entered."""
         # Show spinner and hide button initially
-        # self.ids.loading_spinner.opacity = 1
-        # self.ids.loading_spinner.active = True
-        # self.ids.delayed_button.opacity = 0
-        # self.ids.delayed_button.disabled = True
+        self.ids.loading_spinner.opacity = 1
+        self.ids.loading_spinner.active = True
+        self.ids.delayed_button.opacity = 0
+        self.ids.delayed_button.disabled = True
 
         # Start the spinner and schedule video playback
-        Clock.schedule_once(self.show_button, 5)  # Show button after 5 seconds
+        Clock.schedule_once(self.show_button, 8)  # Show button after 5 seconds
         self.play_random_video()
 
     def play_random_video(self):

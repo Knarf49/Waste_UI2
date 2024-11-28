@@ -1,0 +1,22 @@
+#:import ZBarCam kivy_garden.zbarcam.ZBarCam
+#:import ZBarSymbol pyzbar.pyzbar.ZBarSymbol
+
+<ScanScreen>:
+    name: "scan"
+    canvas.before:
+        Color:
+            rgba: (221/255, 237/255, 233/255, 1)  # Set background color to white
+        Rectangle:
+            size: self.size
+            pos: self.pos
+
+    FloatLayout:
+        # ZBarCam for scanning
+        ZBarCam:
+            id: zbarcam
+            resolution: (640, 480)
+            code_types: ZBarSymbol.QRCODE, ZBarSymbol.EAN13
+            allow_stretch: True
+            size_hint: .7,.7  # Make the camera view fullscreen
+            pos_hint: {"center_x": 0.5, "center_y": 0.5}  # Center it over the scanner area
+       

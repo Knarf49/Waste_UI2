@@ -19,9 +19,26 @@
             size_hint: 1, 1  # Fill the entire screen
             pos_hint: {"center_x": 0.5, "center_y": 0.5}  # Center the video
 
-        Button:
-            background_color: 0, 0, 0, 0  # Fully transparent
-            size_hint: 1, 1
-            on_press:
-                root.manager.transition = SlideTransition(direction="left")  # Define slide direction
-                root.manager.current = "page2"  # Navigate to "page2"
+        #Button:
+            #background_color: 0, 0, 0, 0  # Fully transparent
+            #size_hint: 1, 1
+            #on_press:
+                #root.manager.transition = SlideTransition(direction="left")  # Define slide direction
+                #root.manager.current = "page2"  # Navigate to "page2"
+
+        MDRaisedButton:
+            id: delayed_button
+            font_name: 'prompt-B'
+            text: "ไปสแกนขยะกันเถอะ!"
+            text_color: [1, 1, 1, 1]  # White text
+            size_hint: 0.2, 0.1
+            pos_hint: {"center_x": 0.85, "center_y": 0.1}
+            font_size: "25sp"
+            opacity: 1  # Hidden initially
+            #disabled: True  # Disabled initially
+            on_release:
+                app.root.current = "scan"
+                root.manager.transition.direction = 'left'
+            theme_bg_color: "Custom"
+            md_bg_color: "#1EDC5A"
+            elevation_normal: 8
