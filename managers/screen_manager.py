@@ -4,7 +4,7 @@ from screens.page2_screen import Page2Screen
 from screens.result_screen import ResultScreen
 from screens.mascot_page import MascotScreen
 from screens.mascot2_page import Mascot2Screen
-from screens.ShowBin import ShowBinScreen
+from screens.ShowBin import ShowbinScreen
 
 class MyScreenManager(ScreenManager):
     def __init__(self, **kwargs):
@@ -12,7 +12,7 @@ class MyScreenManager(ScreenManager):
         # Add screens to the ScreenManager
         self.add_widget(MascotScreen(name="mascot"))
         self.add_widget(Mascot2Screen(name="mascot2"))
-        self.add_widget(ShowBinScreen(name="showbin"))
+        self.add_widget(ShowbinScreen(name="showbin"))
         self.add_widget(Page2Screen(name="page2"))
         self.add_widget(ResultScreen(name="result"))
         self.add_widget(EndCreditScreen(name="endcredit"))

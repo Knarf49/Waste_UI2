@@ -18,3 +18,11 @@
             options: {"eos": "loop"}  # Loop when video ends
             size_hint: 1, 1
             pos_hint: {"center_x": 0.5, "center_y": 0.5}
+
+    FloatLayout:
+        Button:
+            background_color: 0, 0, 0, 0  # Fully transparent
+            size_hint: 1, 1  # Covers the entire screen
+            on_press:
+                root.manager.transition= NoTransition()
+                app.root.current = "showbin"

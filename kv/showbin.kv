@@ -1,28 +1,27 @@
-#: import SlideTransition kivy.uix.screenmanager.SlideTransition
+#:import SlideTransition kivy.uix.screenmanager.SlideTransition
 
-<ShowBinScreen>:
+<ShowbinScreen>:
     name: "showbin"
     canvas.before:
         Color:
-            rgba: (207/255, 241/255, 200/255, 1)  # Set background color
+            rgba: (231/255, 237/255, 233/255, 1)  # Set background color
         Rectangle:
             size: self.size
             pos: self.pos
 
     FloatLayout:
         Video:
-            id: showbin_video
-            source: "video/loading/B-loading1.mp4"  # Start with no source, set it in Python
-            state: "pause"  # Default state
-            allow_stretch: True  # Allow stretching
-            options: {"eos": "loop"}  # Loop when video ends
-            size_hint: 1, 1
-            pos_hint: {"center_x": 0.5, "center_y": 0.5}
+            id: mascot_video
+            source: "video/showbin.mp4"  # Path to the video
+            state: "play"  # Video starts playing automatically
+            allow_stretch: True  # Stretch to fill the layout
+            options: {"eos": "loop"}  # Loop the video
+            size_hint: 1, 1  # Fill the entire screen
+            pos_hint: {"center_x": 0.5, "center_y": 0.5}  # Center the video
 
-    FloatLayout:
         Button:
             background_color: 0, 0, 0, 0  # Fully transparent
             size_hint: 1, 1
             on_press:
-                #root.manager.transition= SlideTransition()
-                app.root.current = "page2"
+                root.manager.transition = SlideTransition(direction="left")  # Define slide direction
+                root.manager.current = "page2"  # Navigate to "page2"

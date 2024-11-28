@@ -14,7 +14,7 @@ class Mascot2Screen(Screen):
         video.allow_stretch = True
 
         # Schedule transition to the next screen after 2 seconds
-        Clock.schedule_once(self.go_to_next_screen, 4)
+        # Clock.schedule_once(self.go_to_next_screen, 4)
 
     def go_to_next_screen(self, dt):
         # Transition to the "next_screen"

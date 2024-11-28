@@ -1,4 +1,4 @@
 from kivy.uix.screenmanager import Screen
 
-class ShowBinScreen(Screen):
+class ShowbinScreen(Screen):
     pass
