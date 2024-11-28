@@ -12,6 +12,7 @@ class Page2Screen(Screen):
         self.ids.delayed_button.disabled = True
 
         # Start the spinner and schedule video playback
+        #เปลี่ยนตัวหม
         Clock.schedule_once(self.show_button, 8)  # Show button after 5 seconds
         self.play_random_video()
 
