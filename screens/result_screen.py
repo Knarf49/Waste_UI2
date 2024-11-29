@@ -1,14 +1,14 @@
 from kivy.uix.screenmanager import Screen
 from kivy.uix.floatlayout import FloatLayout
 from kivy.properties import StringProperty
-from kivy.uix.video import Video  # Import Video widget to display the video
-from kivy.uix.button import Button  # Import button widget to interact
-from kivy.uix.label import Label
-
+from kivy.uix.video import Video
+from kivymd.uix.button import MDRaisedButton
+from kivy.core.audio import SoundLoader
+from kivy.graphics import Color, Line
 
 class ResultScreen(Screen):
-    video_source = StringProperty("")  # Initial empty video source
-    obj = StringProperty('')  # Default empty object
+    video_source = StringProperty("")
+    obj = StringProperty('')
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -19,37 +19,52 @@ class ResultScreen(Screen):
         self.video_player.size_hint = (1, 1)
         self.video_player.pos_hint = {'center_x': 0.5, 'center_y': 0.5}
 
+        # โหลดไฟล์เสียง
+        self.sound = SoundLoader.load(r"C:\Users\Frank\Downloads\มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าธนบุรี 3.m4a")
+        if self.sound:
+            self.sound.volume = 1.0
+
         # Add video player to layout
         layout.add_widget(self.video_player)
 
-        # Add a label to display which object is detected
-        self.object_label = Label(text=f"Detected: {self.obj}", size_hint=(None, None), size=(200, 50))
-        self.object_label.pos_hint = {'center_x': 0.5, 'y': 0.05}
-        layout.add_widget(self.object_label)
-
-        # Add a button to return to the previous screen or go to endcredits
-        self.end_button = Button(text="End Credits", size_hint=(None, None), size=(200, 50))
-        self.end_button.pos_hint = {'center_x': 0.5, 'y': 0.1}
-        self.end_button.bind(on_press=self.on_end_button_click)
-        layout.add_widget(self.end_button)
+        # สร้างปุ่มกลับสู่หน้าหลักด้วยสไตล์ใหม่
+        home_button = MDRaisedButton(
+            text="กลับสู่หน้าหลัก",
+            font_name='prompt-B',
+            font_size="25sp",
+            size_hint=(None, None),
+            size=("400dp", "200dp"),
+            pos_hint={"center_x": 0.85, "center_y": 0.2},
+            md_bg_color=[1, 1, 1, 1],  # สีขาว
+            text_color=[0, 0, 0, 1],   # ตัวอักษรสีดำ
+            line_color=[0, 0, 0, 1],   # เส้นขอบสีดำ
+            line_width=2,              # ความหนาของเส้นขอบ
+            elevation=2,               # เงาบางๆ
+            ripple_color=[0.9, 0.9, 0.9, 1]  # สีเมื่อกดปุ่ม
+        )
+        home_button.bind(on_release=self.go_to_endcredit)
+        layout.add_widget(home_button)
 
         # Add the layout to the screen
         self.add_widget(layout)
 
     def change_video(self, new_source, detected_obj):
-        """
-        Change the video source dynamically and update the object label.
-        """
         self.video_source = new_source
         self.obj = detected_obj
-        self.video_player.source = new_source  # Set the new video source
-        self.video_player.play()  # Start the video playback
-        self.object_label.text = f"Detected: {detected_obj}"  # Update the detected object label
+        self.video_player.source = new_source
+        self.video_player.state = 'play'
+        
+        if detected_obj == 'Bottle':
+            if self.sound:
+                self.sound.play()
+        
         print(f"Video source changed to: {new_source}")
 
-    def on_end_button_click(self, instance):
-        """
-        Switch to the 'endcredit' screen when the button is clicked.
-        """
-        print("End credits button clicked!")
-        self.manager.current = "endcredit"  # Navigate to 'endcredit' screen
+    def go_to_endcredit(self, instance):
+        if self.sound:
+            self.sound.stop()
+        self.manager.current = "endcredit"
+
+    def on_leave(self):
+        if self.sound:
+            self.sound.stop()

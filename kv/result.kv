@@ -2,7 +2,7 @@
     name: "result"
     canvas.before:
         Color:
-            rgba: (221/255, 237/255, 233/255, 1)  # Set background color
+            rgba: (221/255, 237/255, 233/255, 1)
         Rectangle:
             size: self.size
             pos: self.pos
@@ -11,11 +11,13 @@
         MDRaisedButton:
             text: "กลับสู่หน้าหลัก"
             font_name: 'prompt-B'
-            font_size: "25sp"  # Set font size
-            size_hint: None, None  # Allows absolute sizing
-            size: "400dp", "200dp"  # Set width and height of the button
-            pos_hint: {"center_x": 0.85, "center_y": 0.2}  # Center the button
-            md_bg_color: "#1EDC5A"
-            elevation_normal: 12  # Set the normal elevation (button shadow)
-            on_release: 
-                app.root.current = "endcredit"
+            font_size: "25sp"
+            size_hint: None, None
+            size: "400dp", "200dp"
+            pos_hint: {"center_x": 0.85, "center_y": 0.2}
+            md_bg_color: [1, 1, 1, 1]  # สีขาว
+            text_color: [0, 0, 0, 1]   # ตัวอักษรสีดำ
+            line_color: [0, 0, 0, 1]   # เส้นขอบสีดำ
+            line_width: 2              # ความหนาของเส้นขอบ
+            elevation: 2               # เงาบางๆ
+            ripple_color: [0.9, 0.9, 0.9, 1]  # สีเมื่อกดปุ่ม
