@@ -31,9 +31,9 @@ class ResultScreen(Screen):
         home_button = MDRaisedButton(
             text="กลับสู่หน้าหลัก",
             font_name='prompt-B',
-            font_size="25sp",
+            font_size="40sp",
             size_hint=(None, None),
-            size=("400dp", "200dp"),
+            size=("850dp", "450dp"),
             pos_hint={"center_x": 0.85, "center_y": 0.2},
             md_bg_color= [0.85, 1, 0.85, 1],  # สีเขียวอ่อน
             text_color=[0, 0, 0, 1],   # ตัวอักษรสีดำ
