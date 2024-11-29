@@ -15,6 +15,10 @@ LabelBase.register(name='prompt-R', fn_regular='fonts/Prompt/Prompt-Regular.ttf'
 LabelBase.register(name='prompt-B', fn_regular='fonts/Prompt/Prompt-Bold.ttf')
 LabelBase.register(name='prompt-Semi', fn_regular='fonts/Prompt/Prompt-SemiBold.ttf')
 
+#TODO ทำให้ปุ่มกดไวขึ้น
+#TODO เพิ่ม class ที่หายไป
+#TODO ทำให้เปิด vdo เร็วขึ้น
+
 # Load KV files
 Builder.load_file("kv/idle.kv")
 Builder.load_file("kv/page2.kv")

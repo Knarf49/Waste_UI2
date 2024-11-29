@@ -38,7 +38,7 @@ Builder.load_string('''
             text_color: 0, 0, 0, 1
             opacity: 0
 ''')
-SCAN_DELAY = 0.2
+SCAN_DELAY = 1.4
 
 class CameraImage(Image):
    pass
