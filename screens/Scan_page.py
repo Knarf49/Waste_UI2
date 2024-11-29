@@ -38,6 +38,7 @@ Builder.load_string('''
             text_color: 0, 0, 0, 1
             opacity: 0
 ''')
+SCAN_DELAY = 0.2
 
 class CameraImage(Image):
    pass
@@ -168,7 +169,7 @@ class ScanScreen(Screen):
                         self.detection_start_time = time.time()
                     
                     elapsed_time = time.time() - self.detection_start_time
-                    if elapsed_time >= 3:
+                    if elapsed_time >= SCAN_DELAY:
                         video_path = 'video/result/Bottle.mp4' if best_detection['class_name'] == 'plastic_bottle' else 'video/result/Aluminium.mp4'
                         self.switch_to_result(video_path, best_detection['class_name'])
                 else:
