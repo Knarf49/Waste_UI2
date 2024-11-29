@@ -5,6 +5,7 @@ from kivy.lang import Builder
 from kivy.core.window import Window
 
 Window.size = (1024, 600)
+# Window.fullscreen = True
 # Register fonts globallyq
 LabelBase.register(name='Cooper-B', fn_regular='fonts/cooper/CooperHewitt-Bold.otf')
 LabelBase.register(name='Cooper-M', fn_regular='fonts/cooper/CooperHewitt-Medium.otf')

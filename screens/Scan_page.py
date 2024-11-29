@@ -15,14 +15,14 @@ class CameraImage(Image):
     pass
 
 class ScanScreen(Screen):
+    CAMERA_INDEX = 0
+    MAIN_MODEL = r"main.pt"  # Path to your YOLO model
+
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-
-        # ตัวแปรสำหรับจัดการกล้อง
-        self.camera_running = False  # สถานะของกล้อง
-        self.capture = None  # ตัวจับภาพจากกล้อง
-        self.model = YOLO(r"C:\Users\Frank\Documents\GitHub\Waste_UI2\best.pt")  # โหลด YOLO โมเดล (แก้ไข path ให้ตรงกับโมเดลของคุณ)
-        self.detected_plastic_bottle = False
+        self.capture = None
+        self.model = YOLO(self.MAIN_MODEL)
+        self.camera_running = False
         self.detection_start_time = None
 
     def on_enter(self, *args):
@@ -31,7 +31,8 @@ class ScanScreen(Screen):
         """
         super().on_enter(*args)
         self.start_camera_thread()
-    
+        print(self.model.names) 
+
     def on_leave(self, *args):
         """
         Called when the screen is left. Stops the camera.
@@ -39,115 +40,85 @@ class ScanScreen(Screen):
         super().on_leave(*args)
         self.stop_camera()
 
-
     def start_camera_thread(self):
         """
-        ฟังก์ชันเริ่มต้นกล้องใน thread แยก
+        Starts the camera in a new thread.
         """
+        self.ids.detection_status.text = "กำลังเปิดกล้อง..."  # Update the label text to "Opening camera..."
         if not self.camera_running:
-            thread = Thread(target=self.open_camera_with_opencv)
-            thread.start()
+            self.open_camera_with_opencv()
 
     def open_camera_with_opencv(self):
         """
-        เปิดกล้องด้วย OpenCV
+        Opens the camera using OpenCV.
         """
-        if self.capture is not None:
-            self.stop_camera()
-
-        self.capture = cv2.VideoCapture(0)  # ใช้ index 1 สำหรับ USB camera
+        self.capture = cv2.VideoCapture(self.CAMERA_INDEX)
         if not self.capture.isOpened():
-            print("Error: Could not open the USB camera.")
+            self.ids.detection_status.text = "ข้อผิดพลาด: ไม่สามารถเปิดกล้องได้"  # Error message in case of failure
             return
-
         self.camera_running = True
+        self.ids.detection_status.text = "ไม่พบวัตถุ"  # No object detected message
         Clock.schedule_interval(self.update_frame, 1.0 / 30.0)
 
     def update_frame(self, dt):
         """
-        อัปเดตภาพจากกล้องและแสดงในหน้าจอ Kivy
+        Updates the camera frame and runs object detection.
         """
         if self.capture is None or not self.capture.isOpened():
-            print("Error: Camera is not opened.")
             self.stop_camera()
             return
 
         ret, frame = self.capture.read()
         if ret:
-            # Flip the frame vertically
-            # frame = cv2.flip(frame, 0)
-
-            # Convert the frame to RGB for YOLO
+            frame = cv2.flip(frame, 1)  # Mirror the frame
             img = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
-            # Run the YOLO model
             results = self.model(img)
+            best_detection = self.get_best_detection(results, frame)
 
-            # Draw bounding boxes on the frame
-            self.detected_plastic_bottle = False
-            for result in results:
-                boxes = result.boxes.xyxy.cpu().numpy()
-                confidences = result.boxes.conf.cpu().numpy()
-                class_ids = result.boxes.cls.cpu().numpy()
+            if best_detection:
+                x1, y1, x2, y2 = map(int, best_detection["box"])
+                label = f"{best_detection['class_name']} {best_detection['confidence']:.2f}"
+                cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 3)
+                cv2.putText(frame, label, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255, 255, 255), 2)
 
-                for box, confidence, class_id in zip(boxes, confidences, class_ids):
-                    x1, y1, x2, y2 = map(int, box)
-                    label = f"{self.model.names[int(class_id)]} {confidence:.2f}"
-                    cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
-                    cv2.putText(frame, label, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
-
-                    if self.model.names[int(class_id)] == "plastic_bottle":
-                        self.detected_plastic_bottle = True
-                        if self.detection_start_time is None:
-                            self.detection_start_time = time.time()
-
-            if self.detected_plastic_bottle:
-                # ตรวจสอบเวลาที่ผ่านไป
-                elapsed_time = time.time() - self.detection_start_time
-                if elapsed_time >= 3:
-                    print("Plastic bottle detected for 3 seconds. Switching to ResultScreen...")
-                    self.detect_object()
+                self.ids.detection_status.text = f"พบวัตถุ: {best_detection['class_name']}"  # Object detected message
             else:
-                self.detection_start_time = None
+                self.ids.detection_status.text = "ไม่พบวัตถุ"  # No object detected message
 
-            # Flip the frame back for display
-            frame = cv2.flip(frame, 0)
-
-            # Convert the frame to Kivy texture
-            buf = frame.tobytes()
+            buf = cv2.flip(frame, 0).tobytes()
             texture = Texture.create(size=(frame.shape[1], frame.shape[0]), colorfmt="bgr")
             texture.blit_buffer(buf, colorfmt="bgr", bufferfmt="ubyte")
             self.ids.camera_view.texture = texture
-        else:
-            print("Error: Failed to read frame from camera.")
-            self.stop_camera()
 
-    def detect_object(self):
+    def get_best_detection(self, results, frame):
         """
-        ฟังก์ชันนี้จะเรียกเมื่อมีการตรวจจับวัตถุ (ในที่นี้จำลองการตรวจจับ)
+        Processes YOLO results and returns the best detection.
         """
-        detected_class = "plastic_bottle"  # คุณสามารถเชื่อมต่อกับ YOLO หรือโมเดลอื่นได้ในส่วนนี้
+        best_detection = None
+        max_confidence = 0
 
-        if detected_class == "plastic_bottle":
-            # เปลี่ยนค่า obj ใน ResultScreen
-            result_screen = self.manager.get_screen('result')
-            result_screen.obj = 'Bottle'
-            result_screen.change_video(f'video/result/Bottle.mp4')  # อัปเดตวิดีโอ
-            print("Detected: Plastic Bottle")
-            print("Switching to ResultScreen with updated object and video.")
-            # เปลี่ยนหน้าจอไปยัง ResultScreen
-            self.manager.current = 'result'
-            self.stop_camera()
-        else:
-            print("No object detected.")
+        for result in results:
+            for box, confidence, class_id in zip(result.boxes.xyxy.cpu().numpy(),
+                                                 result.boxes.conf.cpu().numpy(),
+                                                 result.boxes.cls.cpu().numpy()):
+                if confidence > max_confidence:
+                    max_confidence = confidence
+                    best_detection = {
+                        "box": box,
+                        "confidence": confidence,
+                        "class_name": result.names[int(class_id)]
+                    }
+
+        return best_detection
 
     def stop_camera(self):
         """
-        หยุดกล้อง
+        Stops the camera.
         """
         if self.capture:
             Clock.unschedule(self.update_frame)
             self.capture.release()
             self.capture = None
             self.camera_running = False
-            print("Camera has been stopped.")
+            self.ids.detection_status.text = "กล้องปิดแล้ว"  # Camera closed message

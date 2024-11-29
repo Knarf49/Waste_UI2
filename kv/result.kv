@@ -8,6 +8,14 @@
             pos: self.pos
 
     FloatLayout:
-        MDIconButton:
-            icon: "home-variant"
-            style: "filled"
+        MDRaisedButton:
+            text: "กลับสู่หน้าหลัก"
+            font_name: 'prompt-B'
+            font_size: "25sp"  # Set font size
+            size_hint: None, None  # Allows absolute sizing
+            size: "400dp", "200dp"  # Set width and height of the button
+            pos_hint: {"center_x": 0.85, "center_y": 0.2}  # Center the button
+            md_bg_color: "#1EDC5A"
+            elevation_normal: 12  # Set the normal elevation (button shadow)
+            on_release: 
+                app.root.current = "endcredit"

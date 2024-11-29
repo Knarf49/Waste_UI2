@@ -18,3 +18,15 @@
             size_hint: 0.8, 0.8  # Reduce the size to 80% of parent in both width and height
             pos_hint: {'center_x': 0.5, 'center_y': 0.5}  # Keep the widget centered
             allow_stretch: True  # Stretch the video to fit the widget
+        
+        Label:
+            id: detection_status
+            text: ""
+            size_hint: None, None
+            size: 400, 80
+            pos_hint: {"center_x": 0.5, "y": 0.02}
+            font_size: 30
+            font_name: 'prompt-B'
+            color: 0, 0, 0, 1
+
+       
