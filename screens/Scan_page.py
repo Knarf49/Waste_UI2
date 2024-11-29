@@ -106,65 +106,73 @@ class ScanScreen(Screen):
                self.ids.status_label.text = "เกิดข้อผิดพลาดในการเปิดกล้อง"
 
    def update_frame(self, dt):
-       """Update camera frame"""
-       if not self.camera_running or not self.capture:
-           return False
+        """Update camera frame"""
+        if not self.camera_running or not self.capture:
+            return False
 
-       try:
-           ret, frame = self.capture.read()
-           if not ret:
-               print("Failed to get frame")
-               self.stop_camera()
-               return False
+        try:
+            ret, frame = self.capture.read()
+            if not ret:
+                print("Failed to get frame")
+                self.stop_camera()
+                return False
 
-           # Process frame
-           # Flip the frame vertically
-           frame = cv2.flip(frame, 0)
+            # Process frame
+            frame = cv2.flip(frame, 0)
+            img = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
-           # Convert the frame to RGB for YOLO
-           img = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+            # Run YOLO detection
+            results = self.model(img)
+            
+            # Process YOLO results
+            self.detected_plastic_bottle = False
+            self.detected_aluminium_can = False  # เพิ่มตัวแปรสำหรับ aluminium can
+            
+            for result in results:
+                boxes = result.boxes.xyxy.cpu().numpy()
+                confidences = result.boxes.conf.cpu().numpy()
+                class_ids = result.boxes.cls.cpu().numpy()
 
-           # Run YOLO detection
-           results = self.model(img)
-           
-           # Process YOLO results
-           self.detected_plastic_bottle = False
-           for result in results:
-               boxes = result.boxes.xyxy.cpu().numpy()
-               confidences = result.boxes.conf.cpu().numpy()
-               class_ids = result.boxes.cls.cpu().numpy()
+                for box, confidence, class_id in zip(boxes, confidences, class_ids):
+                    x1, y1, x2, y2 = map(int, box)
+                    label = f"{self.model.names[int(class_id)]} {confidence:.2f}"
+                    cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
+                    cv2.putText(frame, label, (x1, y1 - 10), 
+                            cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
 
-               for box, confidence, class_id in zip(boxes, confidences, class_ids):
-                   x1, y1, x2, y2 = map(int, box)
-                   label = f"{self.model.names[int(class_id)]} {confidence:.2f}"
-                   cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
-                   cv2.putText(frame, label, (x1, y1 - 10), 
-                             cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+                    # ตรวจสอบทั้ง plastic_bottle และ aluminium_can
+                    if self.model.names[int(class_id)] == "plastic_bottle":
+                        self.detected_plastic_bottle = True
+                        if self.detection_start_time is None:
+                            self.detection_start_time = time.time()
+                    elif self.model.names[int(class_id)] == "aluminium_can":
+                        self.detected_aluminium_can = True
+                        if self.detection_start_time is None:
+                            self.detection_start_time = time.time()
 
-                   if self.model.names[int(class_id)] == "plastic_bottle":
-                       self.detected_plastic_bottle = True
-                       if self.detection_start_time is None:
-                           self.detection_start_time = time.time()
+            # ตรวจสอบเวลาและเปลี่ยนหน้าตามวัตถุที่ตรวจพบ
+            if self.detection_start_time is not None:
+                elapsed_time = time.time() - self.detection_start_time
+                if elapsed_time >= 3:
+                    if self.detected_plastic_bottle:
+                        self.switch_to_result('video/result/Bottle.mp4', 'Bottle')
+                    elif self.detected_aluminium_can:
+                        self.switch_to_result('video/result/Aluminium.mp4', 'Aluminium')
+            else:
+                self.detection_start_time = None
 
-           if self.detected_plastic_bottle:
-               elapsed_time = time.time() - self.detection_start_time
-               if elapsed_time >= 3:
-                   self.switch_to_result()
-           else:
-               self.detection_start_time = None
+            # Convert to texture
+            buf = cv2.flip(frame, 0).tobytes()
+            texture = Texture.create(size=(frame.shape[1], frame.shape[0]), colorfmt='bgr')
+            texture.blit_buffer(buf, colorfmt='bgr', bufferfmt='ubyte')
+            self.ids.camera_view.texture = texture
 
-           # Convert to texture
-           buf = cv2.flip(frame, 0).tobytes()
-           texture = Texture.create(size=(frame.shape[1], frame.shape[0]), colorfmt='bgr')
-           texture.blit_buffer(buf, colorfmt='bgr', bufferfmt='ubyte')
-           self.ids.camera_view.texture = texture
+        except Exception as e:
+            print(f"Error in update_frame: {e}")
+            self.stop_camera()
+            return False
 
-       except Exception as e:
-           print(f"Error in update_frame: {e}")
-           self.stop_camera()
-           return False
-
-       return True
+        return True
 
    def stop_camera(self):
        """Stop the camera"""
@@ -181,12 +189,12 @@ class ScanScreen(Screen):
        self.ids.status_label.opacity = 0
        print("Camera stopped")
 
-   def switch_to_result(self):
-       """Switch to result screen"""
-       self.stop_camera()
-       result_screen = self.manager.get_screen("result")
-       result_screen.change_video('video/result/Bottle.mp4', 'Bottle')
-       self.manager.current = 'result'
+   def switch_to_result(self, video_path, detected_object):
+        """Switch to result screen with specific video"""
+        self.stop_camera()
+        result_screen = self.manager.get_screen("result")
+        result_screen.change_video(video_path, detected_object)
+        self.manager.current = 'result'
 
 if __name__ == "__main__":
     import kivy
