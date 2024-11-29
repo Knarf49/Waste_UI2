@@ -35,12 +35,12 @@ class ResultScreen(Screen):
             size_hint=(None, None),
             size=("400dp", "200dp"),
             pos_hint={"center_x": 0.85, "center_y": 0.2},
-            md_bg_color=[1, 1, 1, 1],  # สีขาว
+            md_bg_color= [0.85, 1, 0.85, 1],  # สีเขียวอ่อน
             text_color=[0, 0, 0, 1],   # ตัวอักษรสีดำ
             line_color=[0, 0, 0, 1],   # เส้นขอบสีดำ
             line_width=2,              # ความหนาของเส้นขอบ
             elevation=2,               # เงาบางๆ
-            ripple_color=[0.9, 0.9, 0.9, 1]  # สีเมื่อกดปุ่ม
+            ripple_color=[0.9, 0.9, 0.9, 1],  # สีเมื่อกดปุ่ม
         )
         home_button.bind(on_release=self.go_to_endcredit)
         layout.add_widget(home_button)

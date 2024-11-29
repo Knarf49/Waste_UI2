@@ -153,7 +153,7 @@ class ScanScreen(Screen):
             # ตรวจสอบเวลาและเปลี่ยนหน้าตามวัตถุที่ตรวจพบ
             if self.detection_start_time is not None:
                 elapsed_time = time.time() - self.detection_start_time
-                if elapsed_time >= 3:
+                if elapsed_time >= 4:
                     if self.detected_plastic_bottle:
                         self.switch_to_result('video/result/Bottle.mp4', 'Bottle')
                     elif self.detected_aluminium_can:

@@ -7,7 +7,7 @@ class EndCreditScreen(Screen):
         self.ids.thankVdo.state = "play"
 
         # Schedule a transition after 5 seconds
-        Clock.schedule_once(self.go_to_mascot, 10)
+        Clock.schedule_once(self.go_to_mascot, 5)
 
     def on_leave(self):
         # Pause the video and cancel any scheduled tasks when leaving the screen

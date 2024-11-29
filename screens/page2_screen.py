@@ -13,7 +13,7 @@ class Page2Screen(Screen):
         self.play_random_video()
         
         # เริ่มเปิดกล้องที่ 5 วินาที
-        Clock.schedule_once(self.prepare_camera, 5)
+        Clock.schedule_once(self.prepare_camera, 4)
         # เปลี่ยนหน้าที่ 8 วินาที
         Clock.schedule_once(self.switch_to_scan, 8)
 
