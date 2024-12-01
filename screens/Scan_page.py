@@ -81,7 +81,7 @@ class ScanScreen(Screen):
         """Start the camera"""
         if not self.camera_running:
             try:
-                self.capture = cv2.VideoCapture(1, cv2.CAP_DSHOW)
+                self.capture = cv2.VideoCapture(0, cv2.CAP_DSHOW)
                 if self.capture.isOpened():
                     # Set camera properties
                     self.capture.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
@@ -125,7 +125,7 @@ class ScanScreen(Screen):
                 return False
 
             # Process frame
-            frame = cv2.flip(frame, 0)
+            frame = cv2.flip(frame, 1)
             img = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
             # ตัวแปรเก็บผลการตรวจจับที่ดีที่สุด
