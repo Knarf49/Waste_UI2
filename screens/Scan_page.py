@@ -44,6 +44,7 @@ class CameraImage(Image):
    pass
 
 class ScanScreen(Screen):
+    
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         
@@ -78,10 +79,14 @@ class ScanScreen(Screen):
         self.stop_camera()
 
     def start_camera(self):
+        
+        # กำหนดหมายเลขกล้อง
+        camera_port=0
+
         """Start the camera"""
         if not self.camera_running:
             try:
-                self.capture = cv2.VideoCapture(0, cv2.CAP_DSHOW)
+                self.capture = cv2.VideoCapture(camera_port, cv2.CAP_DSHOW)
                 if self.capture.isOpened():
                     # Set camera properties
                     self.capture.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
@@ -89,7 +94,7 @@ class ScanScreen(Screen):
                     
                     ret, test_frame = self.capture.read()
                     if ret:
-                        print("Successfully opened camera 1")
+                        print(f"Successfully opened camera {camera_port}")
                         self.camera_running = True
                         # ซ่อนข้อความเมื่อกล้องเปิดสำเร็จ
                         self.ids.status_label.opacity = 0
@@ -125,7 +130,7 @@ class ScanScreen(Screen):
                 return False
 
             # Process frame
-            frame = cv2.flip(frame, 1)
+            frame = cv2.flip(frame, 1) #1=horizontal, 0=vertical, -1=both
             img = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
             # ตัวแปรเก็บผลการตรวจจับที่ดีที่สุด
@@ -210,15 +215,15 @@ class ScanScreen(Screen):
         result_screen.change_video(video_path, detected_object)
         self.manager.current = 'result'
 
-if __name__ == "__main__":
-    import kivy
-    from kivymd.app import MDApp
-    from kivy.core.window import Window
+# if __name__ == "__main__":
+#     import kivy
+#     from kivymd.app import MDApp
+#     from kivy.core.window import Window
 
-    Window.size = (1024, 600)
+#     Window.size = (1024, 600)
 
-    class MyApp(MDApp):
-        def build(self):
-            return ScanScreen()
+#     class MyApp(MDApp):
+#         def build(self):
+#             return ScanScreen()
 
-    MyApp().run()
+#     MyApp().run()
