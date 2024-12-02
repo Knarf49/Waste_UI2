@@ -27,6 +27,7 @@
             font_size: "40sp"
             opacity: 1
             on_release:
+                root.play_sound()
                 app.root.current = "page2"
                 root.manager.transition.direction = 'left'
             md_bg_color: [0.85, 1, 0.85, 1]  # สีเขียวอ่อน

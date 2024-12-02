@@ -16,8 +16,7 @@ LabelBase.register(name='prompt-B', fn_regular='fonts/Prompt/Prompt-Bold.ttf')
 LabelBase.register(name='prompt-Semi', fn_regular='fonts/Prompt/Prompt-SemiBold.ttf')
 
 #TODO ทำให้ปุ่มกดไวขึ้น
-#TODO เพิ่ม plastic cub ที่หายไป
-#TODO เพิ่มเสียงตอนกดปุ่ม
+#TODO เพิ่มเสียงตอนกดปุ่ม / 
 
 # Load KV files
 Builder.load_file("kv/idle.kv")

@@ -6,7 +6,8 @@ class Mascot2Screen(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         # โหลดไฟล์เสียง
-        self.sound = SoundLoader.load(r"C:\Users\Frank\Downloads\มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าธนบุรี 6.m4a")
+        # self.sound = SoundLoader.load(r"C:\Users\Frank\Downloads\มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าธนบุรี 6.m4a")
+        self.sound = SoundLoader.load('sound/mascot2_voice.m4a')
         if self.sound:
             self.sound.volume = 1.0
 
