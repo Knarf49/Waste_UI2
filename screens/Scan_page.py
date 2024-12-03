@@ -106,7 +106,7 @@ class ScanScreen(Screen):
                         # แสดงข้อความ error
                         self.ids.status_label.text = "ไม่สามารถเปิดกล้องได้"
                 else:
-                    print("Could not open camera 1")
+                    print(f"Could not open camera {camera_port}")
                     # แสดงข้อความ error
                     self.ids.status_label.text = "ไม่พบกล้อง"
                     
@@ -169,13 +169,20 @@ class ScanScreen(Screen):
                         cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
 
                 # ตรวจสอบวัตถุและเวลา
-                if best_detection['class_name'] in ["plastic_bottle", "aluminium_can"]:
+                if best_detection['class_name'] in ["plastic_bottle", "aluminium_can","plastic_cup"]:
                     if self.detection_start_time is None:
                         self.detection_start_time = time.time()
                     
                     elapsed_time = time.time() - self.detection_start_time
                     if elapsed_time >= SCAN_DELAY:
-                        video_path = 'video/result/Bottle.mp4' if best_detection['class_name'] == 'plastic_bottle' else 'video/result/Aluminium.mp4'
+                         # Corrected conditional assignment
+                        if best_detection['class_name'] == 'plastic_bottle':
+                            video_path = 'video/result/Bottle.mp4'
+                        elif best_detection['class_name'] == 'aluminium_can':
+                            video_path = 'video/result/Aluminium.mp4'
+                        else:
+                            video_path = 'video/result/Plastic_cup.mp4'
+                        
                         self.switch_to_result(video_path, best_detection['class_name'])
                 else:
                     self.detection_start_time = None
