@@ -38,7 +38,7 @@ Builder.load_string('''
             text_color: 0, 0, 0, 1
             opacity: 0
 ''')
-SCAN_DELAY = 1.4
+SCAN_DELAY = 3
 
 class CameraImage(Image):
    pass
@@ -53,7 +53,7 @@ class ScanScreen(Screen):
         self.camera_running = False
         self.detection_start_time = None
         self.update_event = None
-        self.confidence_threshold = 0.5  # Set 50% confidence threshold
+        self.confidence_threshold = 0.8  # Set 50% confidence threshold
         
         try:
             # โหลดโมเดลทั้ง 4 ตัว
@@ -81,7 +81,7 @@ class ScanScreen(Screen):
     def start_camera(self):
         
         # กำหนดหมายเลขกล้อง
-        camera_port=0
+        camera_port=1
 
         """Start the camera"""
         if not self.camera_running:
@@ -130,7 +130,7 @@ class ScanScreen(Screen):
                 return False
 
             # Process frame
-            frame = cv2.flip(frame, 1) #1=horizontal, 0=vertical, -1=both
+            frame = cv2.flip(frame, 0) #1=horizontal, 0=vertical, -1=both
             img = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
             # ตัวแปรเก็บผลการตรวจจับที่ดีที่สุด

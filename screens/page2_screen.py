@@ -13,9 +13,9 @@ class Page2Screen(Screen):
         self.play_random_video()
         
         # เริ่มเปิดกล้องที่ 5 วินาที
-        Clock.schedule_once(self.prepare_camera, 4.4)
+        Clock.schedule_once(self.prepare_camera, 2.7)
         # เปลี่ยนหน้าที่ 8 วินาที
-        Clock.schedule_once(self.switch_to_scan, 5)
+        Clock.schedule_once(self.switch_to_scan, 3.5)
 
     def prepare_camera(self, dt):
         """เตรียมกล้องก่อนเปลี่ยนหน้า"""
